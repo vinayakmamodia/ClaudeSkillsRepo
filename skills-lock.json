@@ -1,10 +1,40 @@
 {
   "version": 1,
   "skills": {
+    "clay": {
+      "source": "sachacoldiq/ColdIQ-s-GTM-Skills",
+      "sourceType": "github",
+      "computedHash": "1d80cb85d4fc36a8a35bf26eb1d8dca715fb75a41a74a122bb55117ade64d974"
+    },
     "cold-email": {
       "source": "sachacoldiq/ColdIQ-s-GTM-Skills",
       "sourceType": "github",
       "computedHash": "ca9b94d4af2487ab69f7e6d6e863170e669feb8452aae4563e40b904a8808b2d"
+    },
+    "linkedin-ads": {
+      "source": "sachacoldiq/ColdIQ-s-GTM-Skills",
+      "sourceType": "github",
+      "computedHash": "b1b0f99a0a5d922937df5380f0f896adb7a7e49a438d08e7fa05825f66a5c1cb"
+    },
+    "linkedin-content": {
+      "source": "sachacoldiq/ColdIQ-s-GTM-Skills",
+      "sourceType": "github",
+      "computedHash": "805dd813c63dc3eb7cd366ffef987e5233ea86cd0ad2dded84d5cc23cbbe1789"
+    },
+    "list-building": {
+      "source": "sachacoldiq/ColdIQ-s-GTM-Skills",
+      "sourceType": "github",
+      "computedHash": "978b3a2805a93b15e183682861ed79c8188b0b5498ec7742f5704532c9553b10"
+    },
+    "n8n": {
+      "source": "sachacoldiq/ColdIQ-s-GTM-Skills",
+      "sourceType": "github",
+      "computedHash": "157bb1d50db2b925ef2eb22f4b2f0e14e1f9c16e457dbe5fbe3412a2fc7508d9"
+    },
+    "signal-sourcer": {
+      "source": "sachacoldiq/ColdIQ-s-GTM-Skills",
+      "sourceType": "github",
+      "computedHash": "1e0bc9fa2d000597ef42b941e1aa5c0d2ffbd9c9010f7de65242abf12defb1ae"
     }
   }
 }
