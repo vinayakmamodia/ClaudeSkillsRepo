@@ -1,0 +1,234 @@
+import openpyxl
+from openpyxl.styles import Font, Alignment, PatternFill, Border, Side
+
+wb = openpyxl.Workbook()
+ws = wb.active
+ws.title = "Boardline Numbers"
+
+# Styles
+header_font = Font(bold=True, size=11, color="FFFFFF")
+header_fill = PatternFill(start_color="4472C4", end_color="4472C4", fill_type="solid")
+thin_border = Border(
+    left=Side(style='thin'), right=Side(style='thin'),
+    top=Side(style='thin'), bottom=Side(style='thin')
+)
+wrap_align = Alignment(wrap_text=True, vertical='top')
+
+# Data: each entry is (domain, name, [(label, number), ...])
+data = [
+    ("apus.edu", "American Public University System", [
+        ("Main", "(877) 755-2787"),
+        ("International", "+1 (571) 359-3231"),
+        ("Admissions", "(877) 379-8773"),
+        ("Disability Services", "(304) 885-5252"),
+    ]),
+    ("waldenu.edu", "Walden University", [
+        ("Main", "(866) 492-5336"),
+        ("Enrollment", "(844) 937-8785"),
+        ("Technical Support", "(800) 925-3368"),
+        ("General", "(855) 370-2406"),
+    ]),
+    ("capella.edu", "Capella University", [
+        ("Main/Admissions", "(866) 796-6651"),
+        ("Student/Tech Support", "1-888-227-3552"),
+        ("International", "(612) 679-9682"),
+        ("Outside USA", "(612) 977-5000"),
+        ("Faculty", "(866) 561-9754"),
+    ]),
+    ("strayer.edu", "Strayer University", [
+        ("Main/General Info", "(877) 582-0284"),
+        ("Customer Service", "(877) 445-7180"),
+        ("HQ (Herndon, VA)", "(703) 561-1600"),
+        ("Washington DC Campus", "(202) 557-4920"),
+        ("Virginia Beach Campus", "(757) 493-6000"),
+        ("Texas Office", "(469) 454-3400"),
+        ("North Carolina Office", "(704) 499-9200"),
+        ("South Carolina Office", "(803) 750-2500"),
+        ("Technical Support", "(877) 642-2999"),
+        ("Student Financial Svcs", "(844) 727-4357"),
+        ("International (F-1)", "(888) 524-0093"),
+    ]),
+    ("chamberlain.edu", "Chamberlain University", [
+        ("National HQ / Admissions", "(877) 751-5783"),
+        ("Addison, IL (Main)", "(877) 787-6391"),
+        ("Chicago, IL", "(773) 961-3000"),
+        ("Tinley Park, IL", "(708) 560-2000"),
+        ("Phoenix, AZ", "(602) 331-2720"),
+        ("Sandy Springs/Atlanta, GA", "(404) 250-8500"),
+        ("Rancho Cordova/Sacramento, CA", "(916) 330-3410"),
+        ("North Brunswick, NJ", "(732) 875-1300"),
+        ("Columbus, OH", "(614) 252-8890"),
+        ("Houston, TX", "(713) 277-9800"),
+        ("Irving, TX", "(469) 706-6705"),
+        ("Pearland, TX", "(832) 664-7000"),
+        ("San Antonio, TX", "(210) 750-8000"),
+        ("Jacksonville, FL", "(904) 251-8100"),
+        ("Miramar, FL", "(954) 885-3510"),
+        ("Las Vegas, NV", "(702) 786-1660"),
+        ("Charlotte, NC", "(980) 939-6241"),
+        ("Indianapolis, IN", "(317) 816-7335"),
+        ("St. Louis, MO", "(314) 991-6200"),
+        ("Irwindale, CA", "See website"),
+    ]),
+    ("devry.edu", "DeVry University", [
+        ("Main/Admissions", "(866) 338-7934"),
+        ("Keller Grad School", "(888) 653-5537"),
+        ("International", "(602) 216-7700"),
+        ("IT Help Desk", "(877) 306-4283"),
+        ("Folsom, CA", "(916) 351-3700"),
+        ("Long Beach, CA", "(562) 427-0861"),
+        ("Newark, CA", "(510) 574-1200"),
+        ("Ontario, CA", "(909) 622-8866"),
+        ("San Diego, CA", "(619) 683-2446"),
+        ("San Jose, CA", "(408) 571-3760"),
+        ("Sherman Oaks, CA", "(818) 713-8111"),
+        ("Chicago, IL", "(773) 929-8500"),
+        ("Alpharetta, GA", "(770) 619-3600"),
+        ("Phoenix, AZ", "(602) 749-4500"),
+        ("Iselin, NJ", "(732) 729-3960"),
+        ("Columbus, OH", "(614) 253-7291"),
+        ("Irving, TX", "(972) 929-6777"),
+    ]),
+    ("coloradotech.edu", "Colorado Technical University", [
+        ("Main Toll-Free", "(855) 230-0555"),
+        ("Colorado Springs Campus", "(719) 598-0200"),
+        ("Aurora Campus", "(303) 632-2300"),
+    ]),
+    ("fullsail.edu", "Full Sail University", [
+        ("Main Toll-Free", "1-800-226-7625"),
+        ("Main Local", "(407) 679-6333"),
+    ]),
+    ("post.edu", "Post University", [
+        ("Main Toll-Free", "(800) 345-2562"),
+        ("Main Local", "(203) 596-4500"),
+        ("Campus Visit Scheduling", "(800) 582-8250"),
+        ("Customer Service", "(800) 660-6615"),
+        ("International Admissions", "+1 (203) 591-7380"),
+    ]),
+    ("columbiasouthern.edu", "Columbia Southern University", [
+        ("Main Toll-Free", "(800) 977-8449"),
+        ("Main Local", "(251) 981-3771"),
+        ("Admissions", "(877) 347-6050"),
+        ("Financial Aid", "(877) 316-8396"),
+        ("Registrar", "(877) 316-0219"),
+        ("Student Accounts", "(877) 323-4472"),
+        ("Student Support", "(877) 323-4471"),
+        ("Military Support", "(888) 394-5738"),
+    ]),
+    ("uti.edu", "Universal Technical Institute", [
+        ("Corporate Switchboard", "(623) 445-9500"),
+        ("General Admissions", "1-800-834-7308"),
+        ("Avondale, AZ (Main)", "(623) 245-4600"),
+        ("Avondale, AZ (Phoenix/MMI)", "(623) 869-9644"),
+        ("Long Beach, CA", "(562) 541-7000"),
+        ("Rancho Cucamonga, CA", "(909) 484-1929"),
+        ("Sacramento, CA", "(916) 263-9100"),
+        ("Miramar, FL", "(754) 946-5595"),
+        ("Orlando, FL", "(407) 240-2422"),
+        ("Lisle, IL", "(630) 529-2662"),
+        ("Canton, MI", "(734) 423-2100"),
+        ("Bloomfield, NJ", "(833) 207-6077"),
+        ("Mooresville, NC", "(704) 658-1950"),
+        ("Exton, PA", "(610) 458-5595"),
+        ("Austin, TX", "(737) 284-3100"),
+        ("Houston, TX", "(281) 443-6262"),
+        ("San Antonio, TX", "(210) 830-8181"),
+    ]),
+    ("pennfoster.edu", "Penn Foster Online", [
+        ("Main Admissions", "1-800-275-4410"),
+        ("High School (Non-Students)", "1-888-427-6200"),
+        ("College (Non-Students)", "1-800-471-3232"),
+        ("Current Student Support", "1-888-427-1500"),
+        ("Student Services", "1-888-427-1000"),
+        ("College Students/Instructors", "1-888-427-0600"),
+        ("International - Career", "+1 (570) 961-4033"),
+        ("International - College", "+1 (570) 961-4060"),
+    ]),
+    ("south.edu", "South College", [
+        ("Knoxville, TN (Main)", "(865) 251-1800"),
+        ("Knoxville - Parkside, TN", "(865) 329-7801"),
+        ("Knoxville Admissions", "(865) 214-6020"),
+        ("Asheville, NC", "(828) 398-2500"),
+        ("Atlanta, GA", "(470) 322-1200"),
+        ("Dallas, TX", "(469) 896-8275"),
+        ("Indianapolis, IN", "(317) 819-7900"),
+        ("Marietta, GA", "(470) 934-2650"),
+        ("Nashville, TN", "(629) 802-3000"),
+        ("Orlando, FL", "(407) 447-6900"),
+        ("Pittsburgh, PA", "(724) 720-9500"),
+        ("Online Programs", "(865) 392-4762"),
+    ]),
+    ("monroecollege.edu", "Monroe College", [
+        ("Toll-Free", "(800) 556-6676"),
+        ("Bronx Campus", "(718) 933-6700"),
+        ("New Rochelle Campus", "(914) 632-5400"),
+    ]),
+    ("aucmed.edu", "American University of the Caribbean School of Medicine", [
+        ("Main (US Office)", "(305) 446-0600"),
+        ("Toll-Free", "(866) 372-2282"),
+        ("St. Maarten Campus", "(721) 545-2298"),
+        ("Financial Aid", "(732) 509-9027"),
+    ]),
+    ("trident.edu", "Trident University International", [
+        ("Main/Admissions", "(800) 579-3197"),
+        ("Alternate Toll-Free", "(800) 375-9878"),
+        ("Info Request", "(888) 983-7071"),
+    ]),
+    ("auamed.org", "American University of Antigua", [
+        ("Admissions Toll-Free (US)", "(888) 282-8633"),
+        ("New York Office", "(212) 661-8899"),
+        ("Antigua Campus", "(268) 484-8900"),
+    ]),
+    ("academyart.edu", "Academy of Art University", [
+        ("Main Toll-Free", "1-800-544-2787"),
+        ("Main Local", "(415) 274-2200"),
+        ("International Admissions", "(415) 618-8593"),
+        ("Student Services", "(415) 618-6508"),
+        ("Student Self-Service TF", "(888) 709-2787"),
+        ("Online Education TF", "(888) 431-2787"),
+        ("Online Education Intl", "(415) 618-3545"),
+    ]),
+]
+
+# Find max number of phone columns needed
+max_phones = max(len(phones) for _, _, phones in data)
+
+# Headers
+headers = ["Account Domain", "Account Name"]
+for i in range(1, max_phones + 1):
+    headers.append(f"Phone {i} Label")
+    headers.append(f"Phone {i} Number")
+
+for col_idx, header in enumerate(headers, 1):
+    cell = ws.cell(row=1, column=col_idx, value=header)
+    cell.font = header_font
+    cell.fill = header_fill
+    cell.border = thin_border
+    cell.alignment = Alignment(horizontal='center', wrap_text=True)
+
+# Data rows
+for row_idx, (domain, name, phones) in enumerate(data, 2):
+    ws.cell(row=row_idx, column=1, value=domain).border = thin_border
+    ws.cell(row=row_idx, column=2, value=name).border = thin_border
+    for phone_idx, (label, number) in enumerate(phones):
+        label_col = 3 + phone_idx * 2
+        num_col = 4 + phone_idx * 2
+        ws.cell(row=row_idx, column=label_col, value=label).border = thin_border
+        ws.cell(row=row_idx, column=num_col, value=number).border = thin_border
+
+# Set column widths
+ws.column_dimensions['A'].width = 22
+ws.column_dimensions['B'].width = 50
+for col_idx in range(3, len(headers) + 1):
+    col_letter = openpyxl.utils.get_column_letter(col_idx)
+    ws.column_dimensions[col_letter].width = 20
+
+# Freeze panes
+ws.freeze_panes = 'C2'
+
+# Save
+output_path = "/home/user/ClaudeSkillsRepo/Boardline_Numbers.xlsx"
+wb.save(output_path)
+print(f"Excel file saved to: {output_path}")
+print(f"Total organizations: {len(data)}")
+print(f"Max phone columns: {max_phones}")
