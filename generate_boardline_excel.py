@@ -25,8 +25,9 @@ data = [
     ("waldenu.edu", "Walden University", [
         ("Main", "(866) 492-5336"),
         ("Enrollment", "(844) 937-8785"),
+        ("Enrollment (Alt)", "(855) 203-1384"),
         ("Technical Support", "(800) 925-3368"),
-        ("General", "(855) 370-2406"),
+        ("Alumni Relations", "(877) 235-3561"),
     ]),
     ("capella.edu", "Capella University", [
         ("Main/Admissions", "(866) 796-6651"),
@@ -47,6 +48,15 @@ data = [
         ("Technical Support", "(877) 642-2999"),
         ("Student Financial Svcs", "(844) 727-4357"),
         ("International (F-1)", "(888) 524-0093"),
+        ("Mobile, AL", "(251) 288-6000"),
+        ("Montgomery, AL", "(334) 523-3670"),
+        ("Jacksonville, FL", "(904) 538-1000"),
+        ("Morrow, GA", "(678) 422-4100"),
+        ("Suitland, MD", "(301) 505-3300"),
+        ("North Raleigh, NC", "(919) 301-6500"),
+        ("Philadelphia, PA", "(610) 604-7700"),
+        ("Nashville, TN", "(615) 871-2260"),
+        ("Arlington, VA", "(703) 892-5100"),
     ]),
     ("chamberlain.edu", "Chamberlain University", [
         ("National HQ / Admissions", "(877) 751-5783"),
@@ -69,6 +79,7 @@ data = [
         ("Indianapolis, IN", "(317) 816-7335"),
         ("St. Louis, MO", "(314) 991-6200"),
         ("Irwindale, CA", "See website"),
+        ("Troy, MI", "(248) 817-4140"),
     ]),
     ("devry.edu", "DeVry University", [
         ("Main/Admissions", "(866) 338-7934"),
@@ -88,6 +99,8 @@ data = [
         ("Iselin, NJ", "(732) 729-3960"),
         ("Columbus, OH", "(614) 253-7291"),
         ("Irving, TX", "(972) 929-6777"),
+        ("Lisle, IL (HQ)", "(630) 428-9086"),
+        ("Gwinnett, GA", "(770) 381-4400"),
     ]),
     ("coloradotech.edu", "Colorado Technical University", [
         ("Main Toll-Free", "(855) 230-0555"),
