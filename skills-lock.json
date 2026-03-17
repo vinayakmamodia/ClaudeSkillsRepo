@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "cold-email": {
+      "source": "sachacoldiq/ColdIQ-s-GTM-Skills",
+      "sourceType": "github",
+      "computedHash": "ca9b94d4af2487ab69f7e6d6e863170e669feb8452aae4563e40b904a8808b2d"
+    }
+  }
+}
