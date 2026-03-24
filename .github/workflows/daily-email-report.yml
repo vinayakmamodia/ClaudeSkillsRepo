@@ -1,0 +1,31 @@
+name: Daily Email Report
+
+on:
+  schedule:
+    - cron: '0 17 * * *'   # Every day at 5:00 PM UTC
+  workflow_dispatch:         # Allow manual trigger for testing
+
+jobs:
+  send-daily-report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install openpyxl
+
+      - name: Send daily summary email
+        env:
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          RECIPIENT_EMAIL: vinayak.mamodia@leadsquared.com
+        run: python send_daily_report.py
