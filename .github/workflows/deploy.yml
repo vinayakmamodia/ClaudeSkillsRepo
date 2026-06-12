@@ -1,0 +1,79 @@
+name: Fetch data & deploy dashboard
+
+on:
+  # Run every day at 02:00 UTC (~07:30 IST). Adjust as needed.
+  schedule:
+    - cron: "0 2 * * *"
+  # Allow manual runs from the Actions tab.
+  workflow_dispatch:
+  # Rebuild on pushes that change the dashboard or pipeline.
+  push:
+    branches: [main, claude/sweet-mendel-qtaraj]
+    paths:
+      - "dashboard/**"
+      - "scripts/**"
+      - ".github/workflows/deploy.yml"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Only one deployment at a time.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python deps
+        run: pip install -r scripts/requirements.txt
+
+      - name: Fetch latest data from LeadSquared
+        # Won't fail the build if the API is unreachable — the dashboard keeps
+        # the previous committed data files.
+        continue-on-error: true
+        env:
+          LSQ_ACCESS_KEY: ${{ secrets.LSQ_ACCESS_KEY }}
+          LSQ_SECRET_KEY: ${{ secrets.LSQ_SECRET_KEY }}
+          LSQ_HOST: ${{ secrets.LSQ_HOST }}
+          LSQ_OPPORTUNITY_EVENT: ${{ secrets.LSQ_OPPORTUNITY_EVENT }}
+          LSQ_MRR_EVENT: ${{ secrets.LSQ_MRR_EVENT }}
+          LSQ_RENEWAL_EVENT: ${{ secrets.LSQ_RENEWAL_EVENT }}
+        run: python scripts/fetch_leadsquared.py
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install & build dashboard
+        working-directory: dashboard
+        run: |
+          npm install
+          npm run build
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dashboard/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
