@@ -2,7 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { SESSION_COOKIE, verifyToken } from './lib/auth';
 
 // Routes that must be reachable without a session.
-const PUBLIC_PATHS = ['/login', '/api/login'];
+// /api/health is safe to expose: it returns only booleans, env-var NAMES and
+// row counts — never secrets — and is used for setup diagnostics.
+const PUBLIC_PATHS = ['/login', '/api/login', '/api/health'];
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
