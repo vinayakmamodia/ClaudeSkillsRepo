@@ -40,6 +40,17 @@ using a **Neon Postgres** database (also free tier) for storage.
    `POSTGRES_URL` environment variable for you. You don't need to touch the
    database again — the app creates its tables automatically on first use.
 
+### 2b. Add Blob storage (for large downloadable files)
+Original uploaded files are kept so they can be downloaded again. Small files
+can be stored in the database, but large ones (over ~4.5 MB) need **Vercel Blob**:
+
+1. In the **Storage** tab, click **Create Database → Blob**.
+2. Pick the free plan and **connect it to this project**.
+3. This adds the `BLOB_READ_WRITE_TOKEN` variable automatically.
+
+Without Blob, the dashboard still works and retains all data; only the
+*re-download* of large source files is unavailable.
+
 ### 3. Add the login + secret environment variables
 In the project's **Settings → Environment Variables**, add:
 

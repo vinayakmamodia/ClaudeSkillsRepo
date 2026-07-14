@@ -59,10 +59,15 @@ export function ensureSchema(): Promise<void> {
       await sql`CREATE TABLE IF NOT EXISTS files (
         name TEXT PRIMARY KEY,
         mime TEXT NOT NULL DEFAULT 'application/octet-stream',
-        data_base64 TEXT NOT NULL,
+        data_base64 TEXT,
         size INTEGER NOT NULL DEFAULT 0,
         uploaded_at TIMESTAMPTZ NOT NULL DEFAULT now()
       )`;
+      // Large files live in Vercel Blob; store their public URL here.
+      // These run every boot but are cheap and idempotent, and they migrate
+      // a table that was first created before the `url` column existed.
+      await sql`ALTER TABLE files ADD COLUMN IF NOT EXISTS url TEXT`;
+      await sql`ALTER TABLE files ALTER COLUMN data_base64 DROP NOT NULL`;
     })().catch((e) => {
       schemaReady = null; // allow retry on next request
       throw e;

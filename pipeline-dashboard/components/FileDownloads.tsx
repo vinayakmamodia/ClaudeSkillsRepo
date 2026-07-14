@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Download, FileDown, Trash2 } from 'lucide-react';
 import { FILES_UPDATED_EVENT } from '@/lib/browserShims';
 
-type FileMeta = { name: string; mime: string; size: number; uploadedAt: string };
+type FileMeta = { name: string; mime: string; size: number; uploadedAt: string; downloadUrl: string };
 
 function fmtSize(n: number) {
   if (n < 1024) return `${n} B`;
@@ -59,7 +59,7 @@ export default function FileDownloads() {
             </div>
             <div className="flex items-center gap-2 flex-shrink-0">
               <a
-                href={`/api/files/${encodeURIComponent(f.name)}?download=1`}
+                href={f.downloadUrl || `/api/files/${encodeURIComponent(f.name)}?download=1`}
                 className="flex items-center gap-1.5 text-xs font-medium text-sky-700 hover:text-sky-900 border border-sky-200 hover:border-sky-300 rounded-lg px-2.5 py-1.5 transition"
               >
                 <Download className="w-3.5 h-3.5" />

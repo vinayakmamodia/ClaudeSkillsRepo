@@ -96,8 +96,29 @@ export function installShims() {
       return new Uint8Array(buf);
     },
     // Persists the original uploaded File so it stays downloadable.
+    // Large files go straight to Vercel Blob (no 4.5 MB limit); if Blob isn't
+    // configured, small files fall back to storing inline through the function.
     async writeFile(file: File) {
       try {
+        const { upload } = await import('@vercel/blob/client');
+        const blob = await upload(file.name, file, {
+          access: 'public',
+          handleUploadUrl: '/api/files/upload',
+          contentType: file.type || undefined,
+        });
+        await fetch('/api/files', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: file.name, url: blob.url, size: file.size, mime: file.type }),
+        });
+        window.dispatchEvent(new Event(FILES_UPDATED_EVENT));
+        return;
+      } catch {
+        /* Blob not configured or upload failed — try the inline fallback below. */
+      }
+      try {
+        // Fallback only works for files under the ~4.5 MB function limit.
+        if (file.size > 4 * 1024 * 1024) return;
         const fd = new FormData();
         fd.append('file', file);
         await fetch('/api/files', { method: 'POST', body: fd });
