@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { del } from '@vercel/blob';
 import { ensureSchema, sql } from '@/lib/db';
 
 export const runtime = 'nodejs';
@@ -41,6 +42,17 @@ export async function POST(req: NextRequest) {
       const { name, url, size, mime } = await req.json();
       if (!name || !url) {
         return NextResponse.json({ error: 'name and url are required' }, { status: 400 });
+      }
+      // Replacing this filename? Delete the previous version's blob so old
+      // copies don't accumulate in storage.
+      const prev = await sql`SELECT url FROM files WHERE name = ${name} LIMIT 1`;
+      const oldUrl = prev.rows[0]?.url;
+      if (oldUrl && oldUrl !== url) {
+        try {
+          await del(oldUrl);
+        } catch {
+          /* best-effort cleanup */
+        }
       }
       await sql`
         INSERT INTO files (name, mime, url, data_base64, size, uploaded_at)

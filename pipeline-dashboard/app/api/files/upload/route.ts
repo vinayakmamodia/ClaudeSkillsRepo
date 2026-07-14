@@ -31,7 +31,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
             'application/octet-stream',
           ],
           maximumSizeInBytes: 200 * 1024 * 1024, // 200 MB ceiling
-          addRandomSuffix: false,
+          // Unique blob path per upload so re-uploading the same filename never
+          // hits an "already exists" error. The previous version's blob is
+          // cleaned up when the new metadata is recorded (see POST /api/files).
+          addRandomSuffix: true,
         };
       },
       // The browser records metadata after upload() resolves, so this is a no-op.
