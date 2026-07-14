@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     username = String(body.username || '').trim();
-    password = String(body.password || '');
+    password = String(body.password || '').trim();
   } catch {
     return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
   }

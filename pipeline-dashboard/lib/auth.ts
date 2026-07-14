@@ -30,7 +30,9 @@ export function getUsers(): Record<string, string> {
     const idx = trimmed.indexOf(':');
     if (idx <= 0) continue;
     const user = trimmed.slice(0, idx).trim();
-    const pass = trimmed.slice(idx + 1);
+    // Trim the password too, so a stray space/newline in the env var
+    // (a very common copy-paste mistake) can't silently break login.
+    const pass = trimmed.slice(idx + 1).trim();
     if (user) users[user] = pass;
   }
   return users;
