@@ -1,16 +1,52 @@
-import { sql } from '@vercel/postgres';
+import { createPool, type VercelPool } from '@vercel/postgres';
+
+// Vercel's Neon/Postgres integrations don't all use the same env var name.
+// Accept whichever one is present so the app connects regardless of which
+// integration created the database.
+export const CONNECTION_VAR_CANDIDATES = [
+  'POSTGRES_URL',
+  'DATABASE_URL',
+  'POSTGRES_PRISMA_URL',
+  'POSTGRES_URL_NON_POOLING',
+  'DATABASE_URL_UNPOOLED',
+];
+
+export function foundConnectionVars(): string[] {
+  return CONNECTION_VAR_CANDIDATES.filter((n) => !!(process.env[n] || '').trim());
+}
+
+function connectionString(): string {
+  for (const name of CONNECTION_VAR_CANDIDATES) {
+    const v = (process.env[name] || '').trim();
+    if (v) return v;
+  }
+  throw new Error(
+    'No Postgres connection string found. Add the Neon (Postgres) integration in ' +
+      'Vercel → Storage and connect it to this project, then redeploy.'
+  );
+}
+
+let pool: VercelPool | null = null;
+
+function getPool(): VercelPool {
+  if (!pool) pool = createPool({ connectionString: connectionString() });
+  return pool;
+}
+
+// Tagged-template passthrough so routes can keep using: sql`SELECT ...`
+export function sql(strings: TemplateStringsArray, ...values: any[]) {
+  return getPool().sql(strings, ...values);
+}
 
 let schemaReady: Promise<void> | null = null;
 
 /**
- * Create the tables on first use. Safe to call repeatedly — the work runs once
- * per server instance and is idempotent (CREATE TABLE IF NOT EXISTS).
+ * Create the tables on first use. Idempotent and cached per instance.
  *
- * kv_store   — the shared key/value store that replaces the Artifact's
- *              window.storage. All logged-in users read/write the same rows,
- *              so uploaded data is retained and shared across the team.
- * files      — the original uploaded source files, kept so they stay
- *              downloadable ("files should also be available").
+ * kv_store — shared key/value store replacing the Artifact's window.storage.
+ *            All logged-in users read/write the same rows, so uploaded data is
+ *            retained and shared across the team.
+ * files    — original uploaded source files, kept so they stay downloadable.
  */
 export function ensureSchema(): Promise<void> {
   if (!schemaReady) {
@@ -28,12 +64,9 @@ export function ensureSchema(): Promise<void> {
         uploaded_at TIMESTAMPTZ NOT NULL DEFAULT now()
       )`;
     })().catch((e) => {
-      // Reset so a later request can retry if the first attempt failed.
-      schemaReady = null;
+      schemaReady = null; // allow retry on next request
       throw e;
     });
   }
   return schemaReady;
 }
-
-export { sql };
