@@ -30,6 +30,12 @@ export async function GET() {
     result.db = 'ok';
     result.kvRows = Number(r.rows[0].kv);
     result.fileRows = Number(r.rows[0].files);
+
+    // Non-sensitive detail: which keys/files exist and how big (bytes).
+    const kv = await sql`SELECT key, octet_length(value) AS bytes FROM kv_store ORDER BY key`;
+    result.kvKeys = kv.rows.map((x) => ({ key: x.key, bytes: Number(x.bytes) }));
+    const fl = await sql`SELECT name, size FROM files ORDER BY name`;
+    result.files = fl.rows.map((x) => ({ name: x.name, bytes: Number(x.size) }));
   } catch (e: any) {
     result.db = 'error';
     result.dbError = e?.message || String(e);
